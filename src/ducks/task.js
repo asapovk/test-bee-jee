@@ -23,6 +23,7 @@ const reducerRecord = Record({
 
 
 const taskRecord = Record({
+  id: null,
   email: null,
   username: null,
   text: null,
@@ -34,6 +35,8 @@ export default function reducer (state = new reducerRecord(), action) {
   switch (type) {
       case FETCH_TASK_SUCCESS:
         return state.update('tasks', entities => arrToMap(payload, taskRecord))
+      case CREATE_TASK_SUCCESS:
+        return state.update('tasks', entities => entities.set(payload.id, new taskRecord(payload)))
       default:
         return state;
   }
@@ -115,7 +118,7 @@ const createTaskSaga = function*() {
       const response =  yield axios.post('https://uxcandy.com/~shapoval/test-task-backend/create', form, {params: {developer: 'asapovk'}})
       yield put({
         type: CREATE_TASK_SUCCESS,
-        payload: response.data
+        payload: response.data.message
       })
     } catch(e) {
       yield put({
