@@ -30,7 +30,7 @@ class TaskForm extends  Component {
     const {task} = this.props
     if (task) {
       const taskId = task.id
-      this.props.editTask({task, taskId})
+      this.props.editTask({task : {status, text, email, username} , taskId})
     }
     else {
       this.props.createTask({username, email, text, status})

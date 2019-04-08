@@ -3,6 +3,8 @@ import {arrToMap, mapToArr, arrToMapDeep} from '../helpers'
 import {createSelector} from 'reselect'
 import axios from 'axios'
 import {put, takeEvery, call, all, take} from 'redux-saga/effects'
+import md5 from 'md5-hash'
+import encode from 'encode-3986'
 
 export const FETCH_TASK_START = 'task/FETCH_TASK_START'
 export const FETCH_TASK_REJECTED = 'task/FETCH_TASK_REJECTED'
@@ -38,6 +40,8 @@ export default function reducer (state = new reducerRecord(), action) {
         return state.update('tasks', entities => arrToMap(payload.tasks, taskRecord)).set('totalNumber', payload.total_task_count)
       case CREATE_TASK_SUCCESS:
         return state.update('tasks', entities => entities.set(payload.id, new taskRecord(payload)))
+      case EDIT_TASK_SUCCESS:
+        return state.updateIn(['tasks', payload.id], task =>  new taskRecord(payload))
       default:
         return state;
   }
@@ -87,7 +91,7 @@ export const pagesSelector = createSelector(
       return Math.floor(parseInt(number)/3)+1
     }
     else {
-      return parseInt(number)/3 
+      return parseInt(number)/3
     }
   }
 )
@@ -97,14 +101,31 @@ export const pagesSelector = createSelector(
 const editTaskSaga = function*() {
   while(true) {
     const {payload} = yield take(EDIT_TASK_START)
-    const {user, email, text} = payload
-    const taskId = payload.taskId || null
-    const token = 'testToken'
+    const {text, status, email, username} = payload.task
+    const taskId = payload.taskId
+    const token = 'beejee'
     try {
-      const response =  yield axios.post('/task/'+taskId, null)
+
+      const textEnc = encode(text)
+      const statusEnc = encode(status)
+      const tokenEnc = encode(token)
+      console.log(text)
+      console.log(textEnc)
+      console.log(tokenEnc)
+
+      const string = 'status='+status+'&text='+textEnc+'&token='+token
+      const signature = md5(string)
+      console.log(string)
+      var form = new FormData();
+       form.append("text", text);
+       form.append("status", status);
+       form.append("signature", signature);
+       form.append("token", token);
+
+      const response =  yield axios.post('https://uxcandy.com/~shapoval/test-task-backend/edit/'+taskId, form, {params: {developer: 'asapovk'}} )
       yield put({
         type: EDIT_TASK_SUCCESS,
-        payload: response.data
+        payload: {id: taskId, text, status, email, username}
       })
     } catch(e) {
       yield put({
