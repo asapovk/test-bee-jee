@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import {getAuthFromStorage} from './ducks/auth'
-import TaskList from './components/TaskList'
+import Front from './components/Front'
 import './App.css';
 
 
@@ -10,7 +10,7 @@ class App extends Component {
     getAuthFromStorage()
 }
   render() {
-    return <TaskList/>
+    return <Front/>
   }
 }
 
