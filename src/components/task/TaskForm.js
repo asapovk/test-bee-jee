@@ -4,7 +4,7 @@ import {createTask} from '../../ducks/task'
 
 class TaskForm extends  Component {
   state = {
-    user: '',
+    username: '',
     email: '',
     text: ''
   }
@@ -14,9 +14,9 @@ class TaskForm extends  Component {
   }
 
   handleSubmit = () => {
-    const {user, email, text} = this.state
-    this.setState({user: '', email: '', text: ''})
-    this.props.createTask({user, email, text})
+    const {username, email, text} = this.state
+    this.props.createTask({username, email, text})
+    this.setState({username: '', email: '', text: ''})
   }
 
   render() {
@@ -26,9 +26,9 @@ class TaskForm extends  Component {
     const text = task ? task.text : null
     return <div>
             <h4>Input username</h4>
-            <input value={this.state.user}
+            <input value={this.state.username}
               type="text"
-              onChange={this.handleChange('user')}/>
+              onChange={this.handleChange('username')}/>
             <h4>Input email</h4>
             <input value={this.state.email}
               type="text"
@@ -39,6 +39,7 @@ class TaskForm extends  Component {
               onChange={this.handleChange('text')}>
               Describe you task...
             </textarea>
+            <button onClick={this.handleSubmit}>Submit</button>
           </div>
   }
 }

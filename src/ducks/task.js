@@ -23,9 +23,10 @@ const reducerRecord = Record({
 
 
 const taskRecord = Record({
-  status: null,
-  user: null,
-  text: null
+  email: null,
+  username: null,
+  text: null,
+  status: 0
 })
 
 export default function reducer (state = new reducerRecord(), action) {
@@ -80,11 +81,11 @@ export const taskSelector = createSelector(
 const editTaskSaga = function*() {
   while(true) {
     const {payload} = yield take(EDIT_TASK_START)
-    const data = payload.data || payload
+    const {user, email, text} = payload
     const taskId = payload.taskId || null
     const token = 'testToken'
     try {
-      const response =  yield axios.post('/task/'+taskId, data)
+      const response =  yield axios.post('/task/'+taskId, null)
       yield put({
         type: EDIT_TASK_SUCCESS,
         payload: response.data
@@ -105,10 +106,13 @@ const editTaskSaga = function*() {
 const createTaskSaga = function*() {
   while(true) {
     const {payload} = yield take(CREATE_TASK_START)
-    const data = payload
-    const token = 'testToken'
+    const {username, email, text} = payload
     try {
-      const response =  yield axios.post('/task', data)
+      var form = new FormData();
+       form.append("username", username);
+       form.append("email", email);
+       form.append("text", text);
+      const response =  yield axios.post('https://uxcandy.com/~shapoval/test-task-backend/create', form, {params: {developer: 'asapovk'}})
       yield put({
         type: CREATE_TASK_SUCCESS,
         payload: response.data
@@ -129,13 +133,11 @@ const createTaskSaga = function*() {
 const fetchTaskSaga = function*() {
   while(true) {
     const {payload} = yield take(FETCH_TASK_START)
-    const token = payload && payload.user ? payload.user.jwt : null
-    const wordId = payload? payload.wordId : null
     try {
-        var response =  yield axios.get('/task')
+        var response =  yield axios.get('https://uxcandy.com/~shapoval/test-task-backend/', {params: {developer: 'asapovk'}})
         yield put({
           type: FETCH_TASK_SUCCESS,
-          payload: response.data
+          payload: response.data.message.tasks
         })
     } catch(e) {
       yield put({
