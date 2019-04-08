@@ -4,6 +4,7 @@ import {userSelector, signOut} from '../ducks/auth'
 
 import AuthForm from './auth/AuthForm'
 import TaskList from './task/TaskList'
+import TaskForm from './task/TaskForm'
 
 class Front extends  Component {
 
@@ -37,6 +38,7 @@ class Front extends  Component {
   render() {
     return <div>
             {this.rendeUserMenu()}
+            <TaskForm/>
             <TaskList/>
           </div>
   }
