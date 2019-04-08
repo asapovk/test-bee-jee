@@ -144,8 +144,14 @@ const createTaskSaga = function*() {
 const fetchTaskSaga = function*() {
   while(true) {
     const {payload} = yield take(FETCH_TASK_START)
+    const sort_field = payload ? payload.sort_field : null
+    const sort_direction = payload ? payload.sort_direction : null
+    const page = payload ? payload.page : null
+    console.log(sort_field)
+    console.log(sort_direction)
+    console.log(page)
     try {
-        var response =  yield axios.get('https://uxcandy.com/~shapoval/test-task-backend/', {params: {developer: 'asapovk', ...payload}})
+        var response =  yield axios.get('https://uxcandy.com/~shapoval/test-task-backend/', {params: {developer: 'asapovk', sort_field, sort_direction, page}})
         yield put({
           type: FETCH_TASK_SUCCESS,
           payload: response.data.message

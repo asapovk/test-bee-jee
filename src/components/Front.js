@@ -32,19 +32,23 @@ class Front extends  Component {
   }
 
   selectPage = (pageNumber) => {
-    alert(pageNumber)
+    const {sortType, sortDirection} =this.state
+    this.props.fetchTask({sort_field: sortType, sort_direction: sortDirection, page: pageNumber})
+
   }
 
   selectSort = (sorttype) => {
-    alert(sorttype)
+    //alert(sorttype)
     this.setState({sortType: sorttype})
     const {sortType, sortDirection} = this.state
-    this.props.fetchTask({sort_field: sortType, sort_direction: sortDirection})
+    this.props.fetchTask({sort_field: sorttype, sort_direction: sortDirection})
   }
 
-  selectSortDirection = (sortDirection) => {
-    alert(sortDirection)
-    this.setState({sortDirection: sortDirection})
+  selectSortDirection = (sortdirection) => {
+    //alert(sortdirection)
+    this.setState({sortDirection: sortdirection})
+    const {sortType, sortDirection} = this.state
+    this.props.fetchTask({sort_field: sortType, sort_direction: sortdirection})
   }
 
   rendeUserMenu = () => {
@@ -66,7 +70,7 @@ class Front extends  Component {
     return <div>
             {this.rendeUserMenu()}
             <TaskForm/>
-            <ControlPanel onSort={this.selectSort}/>
+            <ControlPanel onSort={this.selectSort} onSortDirection={this.selectSortDirection}/>
             <TaskList tasks={this.props.tasks}/>
             <PagesList onSelect={this.selectPage}/>
           </div>

@@ -14,13 +14,13 @@ export default class ControlPanel extends  Component {
   render() {
     return <div>
               <ul>
-                <button onClick={this.handleSelectSorting('asc')}>
+                <button onClick={this.handleSelectDirection('asc')}>
                   asc
                 </button>
-                <button onClick={this.handleSelectSorting('dec')}>
-                  dec
+                <button onClick={this.handleSelectDirection('desc')}>
+                  desc
                 </button>
-              </ul>  
+              </ul>
               <ul>
                 <button onClick={this.handleSelectSorting('email')}>Sort by email</button>
                 <button onClick={this.handleSelectSorting('username')}>Sort by username</button>
