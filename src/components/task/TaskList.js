@@ -4,11 +4,7 @@ import {fetchTask, taskSelector} from '../../ducks/task'
 import Task from './Task'
 
 
-class TaskList extends  Component {
-
-  componentDidMount () {
-    this.props.fetchTask()
-  }
+export default class TaskList extends  Component {
 
   render() {
     const {tasks} = this.props
@@ -18,6 +14,3 @@ class TaskList extends  Component {
     return <ul>{taskComonents}</ul>
   }
 }
-
-
-export default connect((state)=> ({tasks: taskSelector(state)}),{fetchTask})(TaskList)

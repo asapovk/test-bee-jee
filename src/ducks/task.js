@@ -145,7 +145,7 @@ const fetchTaskSaga = function*() {
   while(true) {
     const {payload} = yield take(FETCH_TASK_START)
     try {
-        var response =  yield axios.get('https://uxcandy.com/~shapoval/test-task-backend/', {params: {developer: 'asapovk'}})
+        var response =  yield axios.get('https://uxcandy.com/~shapoval/test-task-backend/', {params: {developer: 'asapovk', ...payload}})
         yield put({
           type: FETCH_TASK_SUCCESS,
           payload: response.data.message

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
 import {userSelector, signOut} from '../ducks/auth'
+import {fetchTask, taskSelector} from '../ducks/task'
 
 import AuthForm from './auth/AuthForm'
 import TaskList from './task/TaskList'
@@ -12,9 +13,15 @@ class Front extends  Component {
 
   state = {
     openLoginForm: false,
-    pageNumber: 1,
-
+    sortType: null,
+    sortDirection: null
   }
+
+  componentDidMount () {
+    this.props.fetchTask()
+  }
+
+
 
   handleOpenLoginForm = () => {
     this.setState({openLoginForm: true})
@@ -28,8 +35,16 @@ class Front extends  Component {
     alert(pageNumber)
   }
 
-  selectSort = (sortType) => {
-    alert(sortType)
+  selectSort = (sorttype) => {
+    alert(sorttype)
+    this.setState({sortType: sorttype})
+    const {sortType, sortDirection} = this.state
+    this.props.fetchTask({sort_field: sortType, sort_direction: sortDirection})
+  }
+
+  selectSortDirection = (sortDirection) => {
+    alert(sortDirection)
+    this.setState({sortDirection: sortDirection})
   }
 
   rendeUserMenu = () => {
@@ -52,10 +67,10 @@ class Front extends  Component {
             {this.rendeUserMenu()}
             <TaskForm/>
             <ControlPanel onSort={this.selectSort}/>
-            <TaskList/>
+            <TaskList tasks={this.props.tasks}/>
             <PagesList onSelect={this.selectPage}/>
           </div>
   }
 }
 
-export default connect((state)=>({user: userSelector(state)}),{signOut})(Front)
+export default connect((state)=>({user: userSelector(state), tasks: taskSelector(state)}),{signOut, fetchTask})(Front)
