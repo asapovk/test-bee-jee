@@ -67,11 +67,12 @@ class Front extends  Component {
   }
 
   render() {
+    const {user} = this.props
     return <div>
             {this.rendeUserMenu()}
             <TaskForm/>
             <ControlPanel onSort={this.selectSort} onSortDirection={this.selectSortDirection}/>
-            <TaskList tasks={this.props.tasks}/>
+            <TaskList tasks={this.props.tasks} user={user}/>
             <PagesList onSelect={this.selectPage}/>
           </div>
   }

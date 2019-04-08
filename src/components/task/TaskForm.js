@@ -1,29 +1,44 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
-import {createTask} from '../../ducks/task'
+import {createTask, editTask} from '../../ducks/task'
 
 class TaskForm extends  Component {
-  state = {
-    username: '',
-    email: '',
-    text: ''
+  constructor (props) {
+    super(props)
+    this.state = {
+      username: this.props.task ? this.props.task.username : '',
+      email: this.props.task ? this.props.task.email : '',
+      text: this.props.task ? this.props.task.text : '',
+      status: this.props.task ? this.props.task.status : '',
+    }
   }
 
   handleChange = (fieldName) => (e) => {
-    this.setState({[fieldName]: e.target.value})
+    const {task} = this.props
+    if (task) {
+      if (fieldName !== 'username' && fieldName !== 'email')
+      this.setState({[fieldName]: e.target.value})
+    }
+    else {
+      if (fieldName !== 'status')
+      this.setState({[fieldName]: e.target.value})
+    }
   }
 
   handleSubmit = () => {
-    const {username, email, text} = this.state
-    this.props.createTask({username, email, text})
-    this.setState({username: '', email: '', text: ''})
+    const {username, email, text, status} = this.state
+    const {task} = this.props
+    if (task) {
+      const taskId = task.id
+      this.props.editTask({task, taskId})
+    }
+    else {
+      this.props.createTask({username, email, text, status})
+    }
+    this.setState({username: '', email: '', text: '', status: ''})
   }
 
   render() {
-    const {task} = this.props
-    const user = task ? task.user : null
-    const email = task ? task.email : null
-    const text = task ? task.text : null
     return <div>
             <h4>Input username</h4>
             <input value={this.state.username}
@@ -33,6 +48,10 @@ class TaskForm extends  Component {
             <input value={this.state.email}
               type="text"
               onChange={this.handleChange('email')}/>
+            <h4>Input status</h4>
+            <input value={this.state.status}
+              type="text"
+              onChange={this.handleChange('status')}/>
             <h4>Input text</h4>
             <textarea value={this.state.text}
               rows="10"
@@ -45,4 +64,4 @@ class TaskForm extends  Component {
 }
 
 
-export default connect(null, {createTask})(TaskForm)
+export default connect(null, {createTask, editTask})(TaskForm)

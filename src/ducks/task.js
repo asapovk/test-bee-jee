@@ -83,7 +83,12 @@ export const taskSelector = createSelector(
 export const pagesSelector = createSelector(
   state => state.taskReducer.totalNumber,
   (number) => {
-    return Math.floor(parseInt(number)/3)+1
+    if( parseInt(number)/3 !== Math.floor(parseInt(number)/3)) {
+      return Math.floor(parseInt(number)/3)+1
+    }
+    else {
+      return parseInt(number)/3 
+    }
   }
 )
 
