@@ -19,6 +19,7 @@ export const EDIT_TASK_SUCCESS = 'task/EDIT_TASK_SUCCESS'
 
 const reducerRecord = Record({
   tasks: new OrderedMap({}),
+  totalNumber: 0
 })
 
 
@@ -34,7 +35,7 @@ export default function reducer (state = new reducerRecord(), action) {
   const {type, payload} = action
   switch (type) {
       case FETCH_TASK_SUCCESS:
-        return state.update('tasks', entities => arrToMap(payload, taskRecord))
+        return state.update('tasks', entities => arrToMap(payload.tasks, taskRecord)).set('totalNumber', payload.total_task_count)
       case CREATE_TASK_SUCCESS:
         return state.update('tasks', entities => entities.set(payload.id, new taskRecord(payload)))
       default:
@@ -76,6 +77,13 @@ export const taskSelector = createSelector(
     } catch (e) {
       return null
     }
+  }
+)
+
+export const pagesSelector = createSelector(
+  state => state.taskReducer.totalNumber,
+  (number) => {
+    return Math.floor(parseInt(number)/3)+1
   }
 )
 
@@ -140,7 +148,7 @@ const fetchTaskSaga = function*() {
         var response =  yield axios.get('https://uxcandy.com/~shapoval/test-task-backend/', {params: {developer: 'asapovk'}})
         yield put({
           type: FETCH_TASK_SUCCESS,
-          payload: response.data.message.tasks
+          payload: response.data.message
         })
     } catch(e) {
       yield put({

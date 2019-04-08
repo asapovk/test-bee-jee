@@ -5,11 +5,15 @@ import {userSelector, signOut} from '../ducks/auth'
 import AuthForm from './auth/AuthForm'
 import TaskList from './task/TaskList'
 import TaskForm from './task/TaskForm'
+import PagesList from  './task/PagesList'
+import ControlPanel from './task/ControlPanel'
 
 class Front extends  Component {
 
   state = {
-    openLoginForm: false
+    openLoginForm: false,
+    pageNumber: 1,
+
   }
 
   handleOpenLoginForm = () => {
@@ -18,6 +22,14 @@ class Front extends  Component {
 
   handleCloseLoginForm = () => {
     this.setState({openLoginForm: false})
+  }
+
+  selectPage = (pageNumber) => {
+    alert(pageNumber)
+  }
+
+  selectSort = (sortType) => {
+    alert(sortType)
   }
 
   rendeUserMenu = () => {
@@ -39,7 +51,9 @@ class Front extends  Component {
     return <div>
             {this.rendeUserMenu()}
             <TaskForm/>
+            <ControlPanel onSort={this.selectSort}/>
             <TaskList/>
+            <PagesList onSelect={this.selectPage}/>
           </div>
   }
 }
