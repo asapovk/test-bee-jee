@@ -33,7 +33,6 @@ export default function reducer (state = new reducerRecord(), action) {
   switch (type) {
       case FETCH_TASK_SUCCESS:
         return state.update('tasks', entities => arrToMap(payload, taskRecord))
-      case
       default:
         return state;
   }

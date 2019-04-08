@@ -1,3 +1,4 @@
+ /* eslint-disable */
 import {List, Record, OrderedMap} from 'immutable'
 import {arrToMap, mapToArr, arrToMapDeep} from '../helpers'
 import {createSelector} from 'reselect'
@@ -61,7 +62,7 @@ export const userSelector = createSelector(
 //Sagas
 
 export const getAuthFromStorage = () => {
-  const storedData = window.localStorage.getItem('auth')
+  const storedData = window.localStorage.getItem('beeJeeAuth')
   if(storedData) {
     window.store.dispatch({
       type: SIGN_IN_SUCCESS,
@@ -92,6 +93,7 @@ const signInSaga = function* () {
           paylod: 'failed to login'
         })
       }
+    }
 }
 
 const signOutSaga = function* () {
@@ -104,8 +106,6 @@ const signOutSaga = function* () {
   }
 }
 
-
-
 const checkCredentials = (obj) => {
   const {username, password} = obj
   if (username === 'admin' && password === '123') {
@@ -116,7 +116,7 @@ const checkCredentials = (obj) => {
 
 
 const saveObjToStorage = (dataString) => {
-  window.localStorage.setItem('auth', dataString)
+  window.localStorage.setItem('beeJeeAuth', dataString)
 }
 
 
