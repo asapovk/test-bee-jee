@@ -36,7 +36,7 @@ class TaskForm extends  Component {
       this.props.createTask({username, email, text, status})
     }
     this.setState({username: '', email: '', text: '', status: ''})
-    
+    this.props.handleClose()
   }
 
   render() {
