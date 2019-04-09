@@ -3,7 +3,7 @@ import {arrToMap, mapToArr, arrToMapDeep} from '../helpers'
 import {createSelector} from 'reselect'
 import axios from 'axios'
 import {put, takeEvery, call, all, take} from 'redux-saga/effects'
-import md5 from 'md5-hash'
+import md5 from 'blueimp-md5'
 import encode from 'encode-3986'
 
 export const FETCH_TASK_START = 'task/FETCH_TASK_START'
@@ -110,12 +110,13 @@ const editTaskSaga = function*() {
       const statusEnc = encode(status)
       const tokenEnc = encode(token)
       console.log(text)
-      console.log(textEnc)
+      console.log(status)
       console.log(tokenEnc)
 
-      const string = 'status='+status+'&text='+textEnc+'&token='+token
+      const string = 'status='+statusEnc+'&text='+textEnc+'&token='+tokenEnc
       const signature = md5(string)
       console.log(string)
+      console.log(signature)
       var form = new FormData();
        form.append("text", text);
        form.append("status", status);
@@ -123,6 +124,7 @@ const editTaskSaga = function*() {
        form.append("token", token);
 
       const response =  yield axios.post('https://uxcandy.com/~shapoval/test-task-backend/edit/'+taskId, form, {params: {developer: 'asapovk'}} )
+      console.log(response)
       yield put({
         type: EDIT_TASK_SUCCESS,
         payload: {id: taskId, text, status, email, username}
